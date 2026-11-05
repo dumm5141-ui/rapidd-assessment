@@ -120,6 +120,16 @@ dotnet publish src/Rituraj_CSharp_Assignment/Rituraj_CSharp_Assignment.csproj \
 ```
 Produces `publish/linux/Rituraj_C# Assignment`.
 
+### 4. Reproducible Environment via Nix Flakes (Optional)
+If developing on [Nix](https://nixos.org) or NixOS, you can activate the complete pre-configured .NET 8 environment with all libraries (`icu`, `openssl`, `zlib`, `fontconfig`) using:
+```bash
+nix develop
+```
+Or with `direnv`:
+```bash
+direnv allow
+```
+
 ---
 
 ## 🔄 Continuous Integration (CI)

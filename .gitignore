@@ -61,3 +61,4 @@ nunit-*.xml
 task.md
 raw_data.json
 EXPLANATION.md
+.direnv/
