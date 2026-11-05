@@ -1,0 +1,79 @@
+name: Build, Test & Package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build, Run Tests, and Generate Outputs
+
+    steps:
+      # Step 1: Check out the repository source code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up .NET 8 SDK
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Step 3: Restore NuGet dependencies
+      - name: Restore NuGet dependencies
+        run: dotnet restore Rituraj_CSharp_Assignment.sln
+
+      # Step 4: Build the entire solution in Release configuration
+      - name: Build solution
+        run: dotnet build Rituraj_CSharp_Assignment.sln --configuration Release --no-restore
+
+      # Step 5: Execute unit tests
+      - name: Run unit tests
+        run: dotnet test tests/Rituraj_CSharp_Assignment.Tests/Rituraj_CSharp_Assignment.Tests.csproj --configuration Release --no-build --verbosity normal
+
+      # Step 6: Run the visualizer application to generate output artifacts
+      - name: Execute visualizer application
+        run: dotnet run --project src/Rituraj_CSharp_Assignment/Rituraj_CSharp_Assignment.csproj --configuration Release --no-build
+
+      # Step 7: Publish standalone Windows executable
+      - name: Publish Windows Standalone Executable
+        run: |
+          dotnet publish src/Rituraj_CSharp_Assignment/Rituraj_CSharp_Assignment.csproj \
+            -c Release \
+            -r win-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -o artifacts/win-x64
+
+      # Step 8: Publish standalone Linux executable
+      - name: Publish Linux Standalone Executable
+        run: |
+          dotnet publish src/Rituraj_CSharp_Assignment/Rituraj_CSharp_Assignment.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -o artifacts/linux-x64
+
+      # Step 9: Upload output HTML report and Pie Chart as workflow artifacts
+      - name: Upload Output Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: assessment-output-results
+          path: |
+            employees.html
+            piechart.png
+
+      # Step 10: Upload built standalone executables
+      - name: Upload Single-File Executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-executables
+          path: |
+            artifacts/win-x64/Rituraj_C# Assignment.exe
+            artifacts/linux-x64/Rituraj_C# Assignment

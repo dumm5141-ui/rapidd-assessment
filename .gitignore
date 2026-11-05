@@ -22,6 +22,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+publish/
 
 # .NET Core
 project.lock.json
@@ -55,3 +56,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Assignment & Temporary local data
+task.md
+raw_data.json
+EXPLANATION.md
