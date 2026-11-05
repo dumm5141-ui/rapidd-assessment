@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Time Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 30px auto; padding: 0 16px; color: #333; line-height: 1.4; }
+    h1 { margin-bottom: 6px; }
+    p { color: #666; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+    th, td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; }
+    th { background-color: #f2f2f2; font-weight: bold; }
+    tr.low-hours { background-color: #fee2e2; color: #991b1b; }
+    .chart-container { text-align: center; margin-top: 30px; }
+    .chart-container img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Employee Working Time Report</h1>
+  <p>Employees ordered by total time worked. Rows highlighted in red indicate less than 100 hours worked.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Total Time Worked</th>
+        <th>Percentage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Patrick Huthinson</td>
+        <td>212.13 hrs</td>
+        <td>13.08%</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Abhay Singh</td>
+        <td>207.65 hrs</td>
+        <td>12.80%</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Stewart Malachi</td>
+        <td>197.83 hrs</td>
+        <td>12.20%</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>John Black</td>
+        <td>197.02 hrs</td>
+        <td>12.15%</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Mary Poppins</td>
+        <td>167.92 hrs</td>
+        <td>10.35%</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Tim Perkinson</td>
+        <td>163.17 hrs</td>
+        <td>10.06%</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Kavvay Verma</td>
+        <td>158.12 hrs</td>
+        <td>9.75%</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Rita Alley</td>
+        <td>112.18 hrs</td>
+        <td>6.92%</td>
+      </tr>
+      <tr class="low-hours">
+        <td>9</td>
+        <td>Raju Sunuwar</td>
+        <td>95.67 hrs</td>
+        <td>5.90%</td>
+      </tr>
+      <tr class="low-hours">
+        <td>10</td>
+        <td>Tamoy Smith</td>
+        <td>86.78 hrs</td>
+        <td>5.35%</td>
+      </tr>
+      <tr class="low-hours">
+        <td>11</td>
+        <td>(Unassigned)</td>
+        <td>23.50 hrs</td>
+        <td>1.45%</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="chart-container">
+    <h2>Time Distribution</h2>
+    <img src="piechart.png" alt="Employee Pie Chart" />
+  </div>
+</body>
+</html>

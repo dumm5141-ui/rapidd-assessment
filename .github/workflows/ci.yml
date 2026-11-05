@@ -1,0 +1,103 @@
+name: Build, Package & Validate
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build & Linux Validation
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore EmployeeTimeVisualizer.sln
+
+      - name: Build solution
+        run: dotnet build EmployeeTimeVisualizer.sln --configuration Release --no-restore
+
+      - name: Publish Linux Standalone Executable
+        run: |
+          dotnet publish src/EmployeeTimeVisualizer/EmployeeTimeVisualizer.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -o artifacts/linux-x64
+
+      - name: Publish Windows Standalone Executable
+        run: |
+          dotnet publish src/EmployeeTimeVisualizer/EmployeeTimeVisualizer.csproj \
+            -c Release \
+            -r win-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -o artifacts/win-x64
+
+      # Actually execute the published Linux standalone binary
+      - name: Execute published Linux standalone binary
+        run: |
+          chmod +x artifacts/linux-x64/"Rituraj_C# Assignment"
+          artifacts/linux-x64/"Rituraj_C# Assignment"
+          test -f employees.html
+          test -f piechart.png
+
+      - name: Upload Output Deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: assessment-output-results
+          path: |
+            employees.html
+            piechart.png
+
+      - name: Upload Standalone Executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-executables
+          path: |
+            artifacts/win-x64/Rituraj_C# Assignment.exe
+            artifacts/linux-x64/Rituraj_C# Assignment
+
+  validate-windows:
+    runs-on: windows-latest
+    name: Native Windows Executable Validation
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish Windows Standalone Executable
+        run: |
+          dotnet publish src/EmployeeTimeVisualizer/EmployeeTimeVisualizer.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o artifacts/win-x64
+
+      # Actually execute the published Windows executable on real Windows
+      - name: Execute published Windows standalone executable
+        run: |
+          & "artifacts/win-x64/Rituraj_C# Assignment.exe"
+          if (-not (Test-Path "employees.html")) { throw "employees.html was not generated" }
+          if (-not (Test-Path "piechart.png")) { throw "piechart.png was not generated" }
+          Write-Host "Windows executable executed successfully and generated output files."
